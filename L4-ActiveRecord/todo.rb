@@ -20,7 +20,7 @@ class Todo < ActiveRecord::Base
 
   # display the todolist
   def self.to_displayable_list(todo_list)
-    todo_list.map { |todo| todo.to_displayable_string }
+    todo_list.map { |todo| todo.to_displayable_string }.join("\n")
   end
 
   # To add the task
