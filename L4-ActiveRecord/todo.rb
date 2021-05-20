@@ -18,11 +18,6 @@ class Todo < ActiveRecord::Base
     "#{id} . #{display_status} #{todo_text} #{display_date}"
   end
 
-  # display the todolist
-  def self.to_displayable_list(todo_list)
-    todo_list.map { |todo| todo.to_displayable_string }.join("\n")
-  end
-
   # To add the task
   def self.add_task(new_todo)
     Todo.create!(todo_text: new_todo[:todo_text], due_date: Date.today + new_todo[:due_in_days], completed: false)
@@ -49,15 +44,15 @@ class Todo < ActiveRecord::Base
     puts "My Todo-list\n\n"
 
     puts "Overdue\n"
-    puts to_displayable_list Todo.todo_due -1
+    puts all.todo_due(-1).map { |todo| todo.to_displayable_string }.join("\n")
     puts "\n\n"
 
     puts "Due Today\n"
-    puts to_displayable_list Todo.todo_due 0
+    puts all.todo_due(0).map { |todo| todo.to_displayable_string }.join("\n")
     puts "\n\n"
 
     puts "Due Later\n"
-    puts to_displayable_list Todo.todo_due 1
+    puts all.todo_due(1).map { |todo| todo.to_displayable_string }.join("\n")
     puts "\n\n"
   end
 end
