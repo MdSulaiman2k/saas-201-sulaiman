@@ -55,15 +55,15 @@ class Todo < ActiveRecord::Base
     puts "My Todo-list\n\n"
 
     puts "Overdue\n"
-    puts all.overdue.to_displayable_list
+    puts overdue.to_displayable_list
     puts "\n\n"
 
     puts "Due Today\n"
-    puts all.due_today.to_displayable_list
+    puts due_today.to_displayable_list
     puts "\n\n"
 
     puts "Due Later\n"
-    puts all.due_later.to_displayable_list
+    puts due_later.to_displayable_list
     puts "\n\n"
   end
 end
