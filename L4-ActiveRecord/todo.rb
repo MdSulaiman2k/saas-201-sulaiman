@@ -10,7 +10,7 @@ class Todo < ActiveRecord::Base
   end
 
   def due_today?
-    @due_date == Date.today
+    due_date == Date.today
   end
 
   def self.due_later
