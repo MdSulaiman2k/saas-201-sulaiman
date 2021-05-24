@@ -1,26 +1,32 @@
 require "active_record"
 
 class Todo < ActiveRecord::Base
-  # returns -1 (or) 0 (or) 1 when overdue (or) due_today (or) due_later
-  def todo_due?
-    due_date <=> Date.today
+  def self.overdue
+    where("due_date < ?", Date.today)
   end
 
-  #the functions  returns the array of todos according to the check_todo
-  def self.todo_due(check_todo)
-    all.order(:due_date, :id).filter { |todo| todo.todo_due? == check_todo }
+  def self.due_today
+    where("due_date = ?", Date.today)
+  end
+
+  def due_today?
+    @due_date == Date.today
+  end
+
+  def self.due_later
+    where("due_date > ?", Date.today)
   end
 
   # retuns the string what pattern user wants
   def to_displayable_string
     display_status = completed ? "[X]" : "[ ]"
-    display_date = todo_due? == 0 ? nil : due_date
+    display_date = due_today? ? nil : due_date
     "#{id} . #{display_status} #{todo_text} #{display_date}"
   end
 
   # display the todolist
-  def self.to_displayable_list(todo_list)
-    todo_list.map { |todo| todo.to_displayable_string }.join("\n")
+  def self.to_displayable_list
+    all.map { |todo| todo.to_displayable_string }.join("\n")
   end
 
   # To add the task
@@ -49,15 +55,15 @@ class Todo < ActiveRecord::Base
     puts "My Todo-list\n\n"
 
     puts "Overdue\n"
-    puts to_displayable_list Todo.todo_due -1
+    puts all.overdue.to_displayable_list
     puts "\n\n"
 
     puts "Due Today\n"
-    puts to_displayable_list Todo.todo_due 0
+    puts all.due_today.to_displayable_list
     puts "\n\n"
 
     puts "Due Later\n"
-    puts to_displayable_list Todo.todo_due 1
+    puts all.due_later.to_displayable_list
     puts "\n\n"
   end
 end
